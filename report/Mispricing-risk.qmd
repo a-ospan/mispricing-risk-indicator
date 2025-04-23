@@ -1,0 +1,84 @@
+---
+title: "Mispricing Risk Indicator"
+author: Artykzhan Ospan
+format:
+  html:
+    theme: metropolis
+    section-titles: true
+    fig-width: 3
+    fig-height: 2
+    fontsize: 10pt
+    self-contained: true   
+---
+
+## Introduction
+
+This report replicates the Mispricing Risk Indicator described in the IMF Working Paper *"Predicting Financial Crises: The Role of Asset Prices" (WP/23/157)* using recent data from the United States. The purpose is to combine major financial and economic signals into one measure that identifies when asset prices may differ from underlying fundamentals. The indicator is constructed using six components and is scaled from **0 to 100**, representing relative mispricing risk across time. The focus is on the U.S. economy during the period **2015 to 2024**.
+
+---
+
+## Indicator Components
+
+The indicator consists of the following six components:
+
+1. **Real Equity Return** – One-year change in the S&P 500, adjusted for inflation
+2. **Equity Market Volatility** – Rolling standard deviation of monthly equity returns
+3. **FX Volatility** – Volatility in the USD/EUR exchange rate
+4. **Bond Yield Volatility** – Changes in 10-year U.S. Treasury yields
+5. **Sovereign FX Spread** – Ratio of emerging market bond dividends to their prices
+6. **Real House Price Growth** – One-year change in U.S. house prices, adjusted for inflation
+
+Each period shows a different factor affecting pricing or stability, helping to indicate potential overvaluation.
+
+---
+
+## Methodology and Plot
+
+```{python}
+import pandas as pd, numpy as np, matplotlib.pyplot as plt
+
+load = lambda f: pd.read_csv(f"data/{f}.csv", names=["DATE", f], header=0, parse_dates=["DATE"]).dropna().set_index("DATE").apply(pd.to_numeric, errors="coerce")
+files = ["embDiv", "embPrice", "GS10", "DEXUSEU", "CPI", "SP500", "USSTHPI"]
+data = {f: load(f) for f in files}; data["USSTHPI"].columns = ["house_price"]
+
+df = pd.concat(data.values(), axis=1).resample("QE-DEC").mean(numeric_only=True)
+pct = lambda s, n=1: s.pct_change(n, fill_method=None)
+comp = pd.DataFrame(index=df.index)
+comp["real_equity_return"] = pct(df["SP500"],4) - pct(df["CPI"],4)
+comp["equity_vol"] = pct(df["SP500"]).rolling(3).std()
+comp["fx_vol"] = pct(df["DEXUSEU"]).rolling(3).std()
+comp["bond_yield_vol"] = pct(df["GS10"]).rolling(3).std()
+comp["fx_spread"] = df["embDiv"] / df["embPrice"]
+comp["real_house_price_growth"] = pct(df["house_price"],4) - pct(df["CPI"],4)
+
+p = comp.dropna().rank(pct=True) * 100
+for c in ["equity_vol","fx_vol","bond_yield_vol","fx_spread"]: p[c] = 100 - p[c]
+p["Mispricing_Risk"] = p.mean(1); r = p["2015":"2024"]
+
+r["Mispricing_Risk"].plot(figsize=(12,6), lw=2, color="blue", title="U.S. Mispricing Risk")
+plt.axhline(66.7, color="orange", ls="--", lw=1.5, label="66.7 Early Warning")
+plt.axhline(80, color="red", ls="--", lw=1.5, label="80 High Risk")
+plt.ylabel("Percentile"); plt.grid(); plt.legend(); plt.tight_layout(); plt.show()
+```
+
+---
+
+## Interpretation of Key Periods
+
+- **2016–2019:** The indicator remained stable, reflecting steady growth and supportive policies after the financial crisis.
+- **2018 Spike:** A brief increase in risk linked to interest rate hikes and trade tensions.
+- **2020–2021 Peak:** Risk rose sharply during the pandemic recovery due to low rates and government stimulus.
+- **2022 Drop:** The indicator declined as the Federal Reserve raised rates to control inflation.
+- **2023–2024 Rebound:** A slow increase in risk driven by improved market confidence and rising asset prices.
+
+---
+
+## Conclusion
+
+The U.S. Mispricing Risk Indicator looks for signs of overvaluation in financial assets by combining market and macroeconomic data. It has continuously coincided with times of financial and economic instability during the last ten years. The indicator offers a simple and useful method for evaluating changes in market sentiment and spotting pricing that departs from core values.
+
+---
+
+## Reference
+
+International Monetary Fund (2023). *Predicting Financial Crises: The Role of Asset Prices*. IMF Working Paper WP/23/157.
