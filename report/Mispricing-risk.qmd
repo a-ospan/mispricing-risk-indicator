@@ -93,9 +93,22 @@ plt.ylabel("Percentile"); plt.grid(); plt.legend(); plt.tight_layout(); plt.show
 
 ---
 
+## Limitations
+
+## 4.0 Limitations
+
+The Mispricing Risk Indicator is designed as a risk monitoring tool, not as a standalone trading signal or crisis prediction model. A higher score suggests higher relative mispricing risk, but it does not predict the exact timing or direction of market corrections.
+
+The results depend on the selected variables, data frequency, sample period, and proxy measures. Some market risks may not be fully captured, including credit conditions, liquidity stress, investor sentiment, and policy changes. The indicator should therefore be used together with broader macroeconomic and financial analysis.
+
+
+---
+
 ## Conclusion
 
-The U.S. Mispricing Risk Indicator looks for signs of overvaluation in financial assets by combining market and macroeconomic data. It has continuously coincided with times of financial and economic instability during the last ten years. The indicator offers a simple and useful method for evaluating changes in market sentiment and spotting pricing that departs from core values.
+The Mispricing Risk Indicator provides a structured way to track asset pricing risk using U.S. financial data. By combining equity returns, volatility, exchange rates, treasury yields, sovereign spread conditions, and housing prices, the indicator shows how risk changes across different market conditions. The results show higher risk during periods of strong asset price growth and supportive financial conditions, especially during the 2020 to 2021 recovery period. The indicator declined in 2022 as interest rates rose and financial conditions tightened, then began to rebound in 2023 and 2024 as markets recovered.
+
+The project demonstrates how financial time series analysis, percentile scoring, threshold classification, and component level interpretation can be used to build a practical risk monitoring tool.
 
 ---
 
