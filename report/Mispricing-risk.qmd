@@ -1,14 +1,14 @@
 ---
 title: "Mispricing Risk Indicator"
-author: Artykzhan Ospan
+author: "Artykzhan Ospan"
 format:
-  html:
+  beamer:
     theme: metropolis
-    section-titles: true
-    fig-width: 3
-    fig-height: 2
-    fontsize: 10pt
-    self-contained: true   
+    fonttheme: professionalfonts
+    aspectratio: 43
+    fontsize: 9pt
+    fig-width: 7
+    fig-height: 4
 ---
 
 ## Introduction
@@ -34,7 +34,7 @@ Each period shows a different factor affecting pricing or stability, helping to 
 
 ---
 
-## Methodology and Plot
+## Methodology
 
 The project uses a composite-indicator approach. Each data series is cleaned, converted to monthly frequency, and transformed into a risk-related measure. Since the variables have different units, each component is converted into a percentile score.
 The final Mispricing Risk Indicator is calculated as the average of the six component scores. The index ranges from **0 to 100**, where higher values indicate higher relative mispricing risk.
@@ -50,12 +50,12 @@ Risk zones are defined as follows:
 
 ---
 
-## Methodology and Plot
+## Mispricing Risk Plot
 
 ```{python}
 import pandas as pd, numpy as np, matplotlib.pyplot as plt
 
-load = lambda f: pd.read_csv(f"data/{f}.csv", names=["DATE", f], header=0, parse_dates=["DATE"]).dropna().set_index("DATE").apply(pd.to_numeric, errors="coerce")
+load = lambda f: pd.read_csv(f"../data/{f}.csv", names=["DATE", f], header=0, parse_dates=["DATE"]).dropna().set_index("DATE").apply(pd.to_numeric, errors="coerce")
 files = ["embDiv", "embPrice", "GS10", "DEXUSEU", "CPI", "SP500", "USSTHPI"]
 data = {f: load(f) for f in files}; data["USSTHPI"].columns = ["house_price"]
 
@@ -81,34 +81,29 @@ plt.ylabel("Percentile"); plt.grid(); plt.legend(); plt.tight_layout(); plt.show
 
 ---
 
-## Key Drivers by Period
+## Key Drivers by Period {.scriptsize}
 
-| Period | Main Drivers | Interpretation |
+| Period | Main Drivers | Reading |
 |---|---|---|
-| 2016 to 2019 | Equity volatility and bond yield volatility | The indicator stayed mostly stable, while short term increases were linked to market uncertainty and changes in interest rate expectations. |
-| 2018 Spike | Equity volatility and bond yield volatility | Risk increased as markets reacted to tighter monetary policy, higher Treasury yield movements, and trade related uncertainty. |
-| 2020 to 2021 Peak | Real equity return, real house price growth, and low rate conditions | The risk score rose as equity prices and housing prices recovered quickly during a period of low interest rates and policy support. |
-| 2022 Decline | Lower equity momentum and tighter bond market conditions | The indicator declined as the Federal Reserve raised rates, financial conditions tightened, and asset prices adjusted. |
-| 2023 to 2024 Rebound | Equity recovery and housing resilience | Risk began to rise again as market confidence improved, equity prices recovered, and housing market conditions remained relatively strong. |
+| 2016 to 2019 | Equity volatility, bond yield volatility | Stable risk range with brief increases from market uncertainty and rate expectations. |
+| 2018 Spike | Equity volatility, bond yield volatility | Risk rose with tighter policy, Treasury yield moves, and trade uncertainty. |
+| 2020 to 2021 Peak | Real equity return, housing growth, low rates | Risk increased as equity and housing prices recovered quickly. |
+| 2022 Decline | Lower equity momentum, tighter bond conditions | Risk declined as rate hikes tightened financial conditions. |
+| 2023 to 2024 Rebound | Equity recovery, housing resilience | Risk began rising again as confidence and asset prices recovered. |
 
 ---
 
 ## Limitations
 
-## 4.0 Limitations
-
 The Mispricing Risk Indicator is designed as a risk monitoring tool, not as a standalone trading signal or crisis prediction model. A higher score suggests higher relative mispricing risk, but it does not predict the exact timing or direction of market corrections.
 
 The results depend on the selected variables, data frequency, sample period, and proxy measures. Some market risks may not be fully captured, including credit conditions, liquidity stress, investor sentiment, and policy changes. The indicator should therefore be used together with broader macroeconomic and financial analysis.
-
 
 ---
 
 ## Conclusion
 
-The Mispricing Risk Indicator provides a structured way to track asset pricing risk using U.S. financial data. By combining equity returns, volatility, exchange rates, treasury yields, sovereign spread conditions, and housing prices, the indicator shows how risk changes across different market conditions. The results show higher risk during periods of strong asset price growth and supportive financial conditions, especially during the 2020 to 2021 recovery period. The indicator declined in 2022 as interest rates rose and financial conditions tightened, then began to rebound in 2023 and 2024 as markets recovered.
-
-The project demonstrates how financial time series analysis, percentile scoring, threshold classification, and component level interpretation can be used to build a practical risk monitoring tool.
+The project shows how financial time series analysis and percentile scoring can be used to build a practical indicator for monitoring asset pricing risk.
 
 ---
 
