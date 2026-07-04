@@ -13,7 +13,9 @@ format:
 
 ## Introduction
 
-This report replicates the Mispricing Risk Indicator described in the IMF Working Paper *"Predicting Financial Crises: The Role of Asset Prices" (WP/23/157)* using recent data from the United States. The purpose is to combine major financial and economic signals into one measure that identifies when asset prices may differ from underlying fundamentals. The indicator is constructed using six components and is scaled from **0 to 100**, representing relative mispricing risk across time. The focus is on the U.S. economy during the period **2015 to 2024**.
+This project builds a Mispricing Risk Indicator using U.S. financial data from 2015 to 2024. The indicator is inspired by the IMF Working Paper **"Predicting Financial Crises: The Role of Asset Prices" (WP/23/157)** and is designed to monitor periods when asset prices may move away from underlying economic fundamentals.
+
+The model combines six signals across equity markets, market volatility, foreign exchange, fixed income, sovereign spread conditions, and housing prices. Each component is transformed into a comparable percentile-based measure and combined into a **0 to 100 composite risk score**, where higher values indicate greater relative mispricing risk.
 
 ---
 
