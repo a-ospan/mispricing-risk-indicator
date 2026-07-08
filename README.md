@@ -10,4 +10,4 @@ Python, Pandas, NumPy, Matplotlib, Quarto, financial time series analysis, perce
 
 ## Output
 
-PDF, HTML, and Quarto report files are available in the `report` folder.
+PDF, HTML and Quarto report files are available in the `report` folder.
